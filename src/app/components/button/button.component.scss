@@ -1,7 +1,4 @@
 .btn {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   color: #444;
   background: none;
   border: none;
@@ -19,29 +16,19 @@
   padding: 0.7rem 2.5rem;
   border-radius: 50rem;
   box-shadow: 0 1.75rem 3.5rem rgba(0, 0, 0, 0.1);
-}
 
-.btn::first-letter {
-  font-size: 2.4rem;
-  display: inline-block;
-  margin-right: 0.7rem;
-}
+  &::first-letter {
+    font-size: 2.4rem;
+    display: inline-block;
+    margin-right: 0.7rem;
+  }
 
-.btn--new {
-  top: 4rem;
-}
-.btn--roll {
-  top: 39.3rem;
-}
-.btn--hold {
-  top: 46.1rem;
-}
+  &:active {
+    transform: translate(0, 3px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  }
 
-.btn:active {
-  transform: translate(-50%, 3px);
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
-}
-
-.btn:focus {
-  outline: none;
+  &:focus {
+    outline: none;
+  }
 }
