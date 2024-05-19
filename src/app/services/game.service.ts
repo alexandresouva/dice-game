@@ -37,6 +37,7 @@ export class GameService {
     this._emitPlayersUpdated();
     this._isPlaying = true;
     this._activePlayer = this._player1;
+    this._diceRoll$.next(0);
   }
 
   private _setDefaultPlayersStatus() {

@@ -23,10 +23,8 @@ export class AppComponent implements OnInit {
     this._gameService.diceRoll
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe((diceRoll) => {
-        if (!diceRoll) return;
-
         this.diceRoll = diceRoll;
-        this.showDice = true;
+        this.showDice = diceRoll !== 0;
       });
 
     this._gameService.players$
