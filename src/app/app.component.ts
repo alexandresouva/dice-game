@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from './models/player.model';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { GameService } from './services/game.service';
 
 @Component({
   selector: 'app-root',
@@ -8,84 +9,41 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  diceRoll$ = new BehaviorSubject<number | null>(null);
+  diceRoll = 0;
   showDice = false;
+  players: Player[] = [];
+
   private _unsubscribe$ = new Subject<void>();
 
-  isPlaying = false;
-  private _activePlayer!: Player;
-
-  player1!: Player;
-  player2!: Player;
+  constructor(private _gameService: GameService) {}
 
   ngOnInit(): void {
     this.initGame();
 
-    this.diceRoll$.pipe(takeUntil(this._unsubscribe$)).subscribe((diceRoll) => {
-      if (!diceRoll) return;
+    this._gameService.diceRoll
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe((diceRoll) => {
+        if (!diceRoll) return;
 
-      this.showDice = true;
-      if (diceRoll !== 1) {
-        this._activePlayer.currentScore += diceRoll;
-      } else {
-        this._activePlayer.currentScore = 0;
-        this._switchActivePlayer();
-      }
-    });
+        this.diceRoll = diceRoll;
+        this.showDice = true;
+      });
+
+    this._gameService.players$
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe((players) => (this.players = players));
   }
 
   initGame() {
-    this._setDefaultPlayersStatus();
-    this.isPlaying = true;
-    this.showDice = false;
-    this._activePlayer = this.player1;
-  }
-
-  private _setDefaultPlayersStatus() {
-    this.player1 = {
-      id: 1,
-      name: 'Player 1',
-      currentScore: 0,
-      totalScore: 0,
-      isActive: true,
-      isWinner: false,
-    };
-
-    this.player2 = {
-      id: 2,
-      name: 'Player 2',
-      currentScore: 0,
-      totalScore: 0,
-      isActive: false,
-      isWinner: false,
-    };
+    this._gameService.initGame();
   }
 
   rollDice() {
-    if (this.isPlaying) {
-      const diceRoll = Math.trunc(Math.random() * 6) + 1;
-      this.diceRoll$.next(diceRoll);
-    }
-  }
-
-  private _switchActivePlayer() {
-    this._activePlayer.isActive = false;
-    this._activePlayer =
-      this._activePlayer === this.player1 ? this.player2 : this.player1;
-    this._activePlayer.isActive = true;
+    this._gameService.rollDice();
   }
 
   holdScore() {
-    this._activePlayer.totalScore += this._activePlayer.currentScore;
-    this._activePlayer.currentScore = 0;
-
-    if (this._activePlayer.totalScore >= 100) {
-      this._activePlayer.isWinner = true;
-      this.isPlaying = false;
-      this.showDice = false;
-    } else {
-      this._switchActivePlayer();
-    }
+    this._gameService.holdScore();
   }
 
   ngOnDestroy(): void {

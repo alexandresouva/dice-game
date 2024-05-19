@@ -1,7 +1,8 @@
 <main>
-  <app-player [player]="player1"></app-player>
-  <app-player [player]="player2"></app-player>
-  <img *ngIf="showDice" [src]="'../assets/images/dice-' + (diceRoll$ | async) + '.png'" alt="Playing dice" class="dice">
+  <ng-container *ngFor="let player of players">
+    <app-player [player]="player"></app-player>
+  </ng-container>
+  <img *ngIf="showDice" [src]="'../assets/images/dice-' + diceRoll + '.png'" alt="Playing dice" class="dice">
 
   <app-button class="btn btn--new" buttonText="🔄 New game" (click)="initGame()"></app-button>
   <app-button class="btn btn--roll" buttonText="🎲 Roll dice" (click)="rollDice()"></app-button>
