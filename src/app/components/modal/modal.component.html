@@ -1,0 +1,6 @@
+<section *ngIf="showModal" class="modal">
+  <button class="close-modal" (click)="closeModal()">&times;</button>
+  <ng-content></ng-content>
+</section>
+
+<div class="overlay" *ngIf="showModal" (click)="closeModal()"></div>

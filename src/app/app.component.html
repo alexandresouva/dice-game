@@ -1,9 +1,40 @@
 <main>
   <app-player [player]="player1"></app-player>
   <app-player [player]="player2"></app-player>
-  <img *ngIf=" (diceRoll$ | async) as diceRoll" [src]="'../assets/images/dice-' + (diceRoll$ | async) + '.png'"
-    alt="Playing dice" class="dice">
+  <img *ngIf="showDice" [src]="'../assets/images/dice-' + (diceRoll$ | async) + '.png'" alt="Playing dice" class="dice">
 
   <app-button class="btn btn--new" buttonText="🔄 New game" (click)="initGame()"></app-button>
   <app-button class="btn btn--roll" buttonText="🎲 Roll dice" (click)="rollDice()"></app-button>
   <app-button class="btn btn--hold" buttonText="📥 Hold" (click)="holdScore()"></app-button>
+</main>
+
+<app-modal class="modal">
+  <h2 class="modal-title">🎲 Dice Game</h2>
+  <div class="goal">
+    <h3 class="bold">Goal:</h3>
+    <p> Be the first player to reach 100 points.</p>
+  </div>
+
+  <div class="rules">
+    <h3 class="bold">Rules:</h3>
+    <ul class="rules-list">
+      <li>
+        Each player takes turns rolling the dice until they choose to stop.
+      </li>
+      <li>
+        On each turn, the player's score is increased by the value of the dice roll.
+      </li>
+      <li>
+        If a player rolls a 1, they lose all points accumulated in that turn, and the turn passes to the next player.
+      </li>
+      <li>
+        When a player chooses to stop, their current score is added to their total score.
+      </li>
+      <li>
+        The first player to reach 100 points wins!
+      </li>
+    </ul>
+  </div>
+
+  <p>Have fun!</p>
+</app-modal>

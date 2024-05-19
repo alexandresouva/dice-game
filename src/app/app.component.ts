@@ -9,9 +9,10 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   diceRoll$ = new BehaviorSubject<number | null>(null);
+  showDice = false;
   private _unsubscribe$ = new Subject<void>();
 
-  isPlaying = true;
+  isPlaying = false;
   private _activePlayer!: Player;
 
   player1!: Player;
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
     this.diceRoll$.pipe(takeUntil(this._unsubscribe$)).subscribe((diceRoll) => {
       if (!diceRoll) return;
 
+      this.showDice = true;
       if (diceRoll !== 1) {
         this._activePlayer.currentScore += diceRoll;
       } else {
@@ -34,6 +36,8 @@ export class AppComponent implements OnInit {
 
   initGame() {
     this._setDefaultPlayersStatus();
+    this.isPlaying = true;
+    this.showDice = false;
     this._activePlayer = this.player1;
   }
 
@@ -78,6 +82,7 @@ export class AppComponent implements OnInit {
     if (this._activePlayer.totalScore >= 100) {
       this._activePlayer.isWinner = true;
       this.isPlaying = false;
+      this.showDice = false;
     } else {
       this._switchActivePlayer();
     }
