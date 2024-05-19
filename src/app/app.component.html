@@ -4,6 +4,6 @@
   <img *ngIf=" (diceRoll$ | async) as diceRoll" [src]="'../assets/images/dice-' + (diceRoll$ | async) + '.png'"
     alt="Playing dice" class="dice">
 
-  <app-button class="btn btn--new" buttonText="🔄 New game"></app-button>
+  <app-button class="btn btn--new" buttonText="🔄 New game" (click)="initGame()"></app-button>
   <app-button class="btn btn--roll" buttonText="🎲 Roll dice" (click)="rollDice()"></app-button>
   <app-button class="btn btn--hold" buttonText="📥 Hold" (click)="holdScore()"></app-button>

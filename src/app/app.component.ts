@@ -14,26 +14,11 @@ export class AppComponent implements OnInit {
   isPlaying = true;
   private _activePlayer!: Player;
 
-  player1: Player = {
-    id: 1,
-    name: 'Player 1',
-    currentScore: 0,
-    totalScore: 0,
-    isActive: true,
-    isWinner: false,
-  };
-
-  player2: Player = {
-    id: 2,
-    name: 'Player 2',
-    currentScore: 0,
-    totalScore: 0,
-    isActive: false,
-    isWinner: false,
-  };
+  player1!: Player;
+  player2!: Player;
 
   ngOnInit(): void {
-    this._activePlayer = this.player1;
+    this.initGame();
 
     this.diceRoll$.pipe(takeUntil(this._unsubscribe$)).subscribe((diceRoll) => {
       if (!diceRoll) return;
@@ -45,6 +30,31 @@ export class AppComponent implements OnInit {
         this._switchActivePlayer();
       }
     });
+  }
+
+  initGame() {
+    this._setDefaultPlayersStatus();
+    this._activePlayer = this.player1;
+  }
+
+  private _setDefaultPlayersStatus() {
+    this.player1 = {
+      id: 1,
+      name: 'Player 1',
+      currentScore: 0,
+      totalScore: 0,
+      isActive: true,
+      isWinner: false,
+    };
+
+    this.player2 = {
+      id: 2,
+      name: 'Player 2',
+      currentScore: 0,
+      totalScore: 0,
+      isActive: false,
+      isWinner: false,
+    };
   }
 
   rollDice() {
@@ -65,7 +75,7 @@ export class AppComponent implements OnInit {
     this._activePlayer.totalScore += this._activePlayer.currentScore;
     this._activePlayer.currentScore = 0;
 
-    if (this._activePlayer.totalScore >= 40) {
+    if (this._activePlayer.totalScore >= 100) {
       this._activePlayer.isWinner = true;
       this.isPlaying = false;
     } else {
