@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
       if (diceRoll !== 1) {
         this._activePlayer.currentScore += diceRoll;
       } else {
+        this._activePlayer.currentScore = 0;
         this._switchActivePlayer();
       }
     });
@@ -58,6 +59,18 @@ export class AppComponent implements OnInit {
     this._activePlayer =
       this._activePlayer === this.player1 ? this.player2 : this.player1;
     this._activePlayer.isActive = true;
+  }
+
+  holdScore() {
+    this._activePlayer.totalScore += this._activePlayer.currentScore;
+    this._activePlayer.currentScore = 0;
+
+    if (this._activePlayer.totalScore >= 40) {
+      this._activePlayer.isWinner = true;
+      this.isPlaying = false;
+    } else {
+      this._switchActivePlayer();
+    }
   }
 
   ngOnDestroy(): void {
